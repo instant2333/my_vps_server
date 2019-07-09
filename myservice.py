@@ -11,14 +11,14 @@ app=Flask(__name__)
 
 def getdata(symbol,period,size=1):
   for temp in symbol:
-    time1=temp+datetime.datetime.now().strftime('%Y-%m-%d %H.%M.%S')
+    time1=temp+datetime.datetime.now().strftime('%Y-%m-%d %H.%M')
     filepath="static/"+time1+".json"
     with open(filepath,'w+') as file_obj:
-      json.dump(api.get_kline(symbol,period,size),file_obj)
+      json.dump(api.get_kline(temp,period,size),file_obj)
       #json.dump({'1':filepath}, file_obj)
-
+getdata(["btcusdt","ethusdt","xrpusdt","ltcusdt","bchusdt","eosusdt","etcusdt","adausdt"],"1min",101)
 scheduler = BackgroundScheduler()
-scheduler.add_job(getdata,'interval',seconds=120,args=[["btcusdt","ethusdt","xrpusdt","ltcusdt","bchusdt","eosusdt","etcusdt","adausdt"],"1min",3])
+scheduler.add_job(getdata,'interval',seconds=6000,args=[["btcusdt","ethusdt","xrpusdt","ltcusdt","bchusdt","eosusdt","etcusdt","adausdt"],"1min",101])
 scheduler.start()
 
 if __name__ == "__main__":
