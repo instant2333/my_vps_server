@@ -14,7 +14,8 @@ import urllib
 import urllib.parse
 import urllib.request
 import requests
-
+import time
+data_got = False
 # 此处填写APIKEY
 
 ACCESS_KEY = "dqnh6tvdf3-d38cb50c-3701ffae-c3151"
@@ -32,6 +33,7 @@ ACCOUNT_ID = None
 #'Timestamp': '2017-06-02T06:13:49'
 
 def http_get_request(url, params, add_to_headers=None):
+    data_got = False
     headers = {
         "Content-type": "application/x-www-form-urlencoded",
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36',
@@ -39,16 +41,21 @@ def http_get_request(url, params, add_to_headers=None):
     if add_to_headers:
         headers.update(add_to_headers)
     postdata = urllib.parse.urlencode(params)
-    response = requests.get(url, postdata, headers=headers, timeout=5) 
-    try:
-        
-        if response.status_code == 200:
-            return response.json()
-        else:
-            return
-    except BaseException as e:
-        print("httpGet failed, detail is:%s,%s" %(response.text,e))
-        return
+    count=0
+    while data_got == False:
+        try:
+            response = requests.get(url, postdata, headers=headers, timeout=5)
+            if response.status_code == 200:
+                data_got = True
+                return response.json()
+        except requests.exceptions.Timeout as e:
+            data_got = False
+            count=count+1
+            if(count>=10):
+                print("retry 10 times failed,skip request\n"+postdata)
+                break
+            print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
+
 
 
 def http_post_request(url, params, add_to_headers=None):
