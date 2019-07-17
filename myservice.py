@@ -16,9 +16,9 @@ def getdata(symbol,period,size=1):
     with open(filepath,'w+') as file_obj:
       json.dump(api.get_kline(temp,period,size),file_obj)
       #json.dump({'1':filepath}, file_obj)
-getdata(["btcusdt","ethusdt","xrpusdt","ltcusdt","bchusdt","eosusdt","etcusdt","adausdt"],"1min",101)
+getdata(["btcusdt","ethusdt","xrpusdt","ltcusdt","bchusdt","eosusdt","etcusdt","adausdt","omgusdt","zecusdt","dashusdt","xmrusdt"],"5min",2000)
 scheduler = BackgroundScheduler()
-scheduler.add_job(getdata,'interval',seconds=6000,args=[["btcusdt","ethusdt","xrpusdt","ltcusdt","bchusdt","eosusdt","etcusdt","adausdt"],"1min",101])
+scheduler.add_job(getdata,'interval',days=1,args=[["btcusdt","ethusdt","xrpusdt","ltcusdt","bchusdt","eosusdt","etcusdt","adausdt","omgusdt","zecusdt","dashusdt","xmrusdt"],"5min",289])
 scheduler.start()
 
 if __name__ == "__main__":
