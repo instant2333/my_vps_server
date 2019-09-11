@@ -22,18 +22,14 @@ def getcoin():
     if request.method == 'POST' and request.is_json:
         coin_name = request.get_json()['coin_name']
         period=request.get_json()['period']
-        size=request.get_json()['size']
+        size1=request.get_json()['size']
+        size=int(size1)
         result=api.get_kline(coin_name, period, size)
-        print(coin_name,period,size)
-        print(result)
-        return Response(
-            result,
-            mimetype='application/json',
-            headers={
-                'Cache-Control': 'no-cache',
-                'Access-Control-Allow-Origin': '*'
-            }
-        )
+        #print(coin_name,period,size)
+        #print(result)
+        json.dump(result)
+        return result
+
 
 if __name__ == "__main__":
   app.run(
